@@ -2,6 +2,7 @@ package com.dms.support.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.UUID;
 
 import io.vertx.ext.web.RoutingContext;
@@ -23,31 +24,40 @@ public class UserManager {
 		}
 	}
 	
-	public String signUp(String uid, String id, String password) {
+	public HashMap<String, Object> signUp(String uid, String id, String password) {
 		uid = SHA256.encrypt(uid);
 		id = AES256.encrypt(id);
 		password = SHA256.encrypt(password);
+		
+		HashMap<String, Object> result = new HashMap<String, Object>(1);
 		
 		rs = MySQL.executeQuery("SELECT id FROM account WHERE uid=?", uid);
 		try {
 			if(rs.next()) {
 				if(rs.getString("id") == null) {
 					if(idExists(id)) {
-						return "이미 존재하는 아이디입니다.";
+						result.put("success", false);
+						result.put("msg", "이미 존재하는 아이디입니다.");
 					} else {
 						MySQL.executeUpdate("UPDATE account SET id=?, password=? WHERE uid=?", id, password, uid);
-						return "회원가입에 성공했습니다.";
+						result.put("success", true);
+						result.put("msg", "회원가입에 성공했습니다.");
 					}
 				} else {
-					return "이미 회원가입되어 있습니다.";
+					result.put("success", false);
+					result.put("msg", "이미 회원가입되어 있습니다.");
 				}
 			} else {
-				return "고유번호를 확인해 주세요.";
+				result.put("success", false);
+				result.put("msg", "고유번호를 확인해 주세요.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return "서버 오류입니다.";
+			result.put("success", false);
+			result.put("msg", "서버 오류입니다.");
 		}
+		
+		return result;
 	}
 	
 	private String getSessionFromId(String id) {
