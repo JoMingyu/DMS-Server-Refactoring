@@ -2,18 +2,18 @@ package com.dms.restful.account;
 
 import java.util.HashMap;
 
+import com.dms.support.account.UserManager;
 import com.dms.support.routing.API;
 import com.dms.support.routing.REST;
 import com.dms.support.routing.Route;
-import com.dms.support.util.UserManager;
 
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
-@API(functionCategory = "계정", summary = "회원가입")
+@API(functionCategory = "계정", summary = "회원가입 - 학생")
 @REST(requestBody = "uid : String, id : String, password : String", successCode = 201, failureCode = 204, etc = "status message 존재")
-@Route(uri = "/account/register/student", method = HttpMethod.POST)
+@Route(uri = "/account/signup/student", method = HttpMethod.POST)
 public class Signup implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {

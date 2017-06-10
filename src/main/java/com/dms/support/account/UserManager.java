@@ -1,9 +1,14 @@
-package com.dms.support.util;
+package com.dms.support.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
+
+import com.dms.support.util.AES256;
+import com.dms.support.util.MySQL;
+import com.dms.support.util.SHA256;
+import com.dms.support.util.SessionUtil;
 
 import io.vertx.ext.web.RoutingContext;
 
@@ -61,11 +66,14 @@ public class UserManager {
 	}
 	
 	private String getSessionFromId(String id) {
-		rs = MySQL.executeQuery("SELECT * FROM account WHERE id=?", AES256.encrypt(id));
+		rs = MySQL.executeQuery("SELECT * FROM account WHERE id=?", id);
 		try {
-			rs.next();
-			if(rs.getString("session_id") != null) {
-				return rs.getString("session_id");
+			if(rs.next()) {
+				if(rs.getString("session_id") != null) {
+					return rs.getString("session_id");
+				} else {
+					return null;
+				}
 			} else {
 				return null;
 			}
