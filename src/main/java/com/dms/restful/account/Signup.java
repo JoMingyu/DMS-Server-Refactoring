@@ -24,7 +24,6 @@ public class Signup implements Handler<RoutingContext> {
 		String password = ctx.request().getFormAttribute("password");
 		
 		HashMap<String, Object> result = userManager.signUp(uid, id, password);
-		
 		boolean success = Boolean.parseBoolean(result.get("success").toString());
 		
 		if(success) {
