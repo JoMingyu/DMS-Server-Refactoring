@@ -9,9 +9,9 @@ import java.sql.SQLException;
 public class MySQL {
 	private static Connection connection;
 	
-	private static final String URL = "jdbc:mysql://localhost:3306/table_name";
-	private static final String USER = "";
-	private static final String PASSWORD = "";
+	private static final String URL = "jdbc:mysql://localhost:3306/dsm_dms";
+	private static final String USER = "root";
+	private static final String PASSWORD = SecureConfig.getValue("database");
 	
 	static {
 		try {

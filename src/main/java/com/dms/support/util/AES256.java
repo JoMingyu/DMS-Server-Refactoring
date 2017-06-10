@@ -19,13 +19,15 @@ public class AES256 {
     private static String ips;
     private static Key keySpec;
 
-    public AES256(String key) {
+    static {
+    	String key = SecureConfig.getValue("AES");
+    	
         try {
             byte[] keyBytes = new byte[16];
             byte[] b = key.getBytes("UTF-8");
             System.arraycopy(b, 0, keyBytes, 0, keyBytes.length);
             SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
-            ips = key.substring(0, 16);
+            AES256.ips = key.substring(0, 16);
             AES256.keySpec = keySpec;
         } catch (Exception e) {
             e.printStackTrace();
