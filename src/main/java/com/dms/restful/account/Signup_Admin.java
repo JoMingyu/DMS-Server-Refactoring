@@ -14,21 +14,15 @@ import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
-@API(functionCategory = "계정", summary = "회원가입 - 관리자")
-@REST(requestBody = "id : String, password : String, password_confirm : String, name : String", successCode = 201, failureCode = 204, etc = "status message 존재")
+@API(functionCategory = "계정", summary = "회원가입(계정 생성) - 관리자")
+@REST(requestBody = "id : String, password : String, name : String", successCode = 201, failureCode = 204, etc = "status message 존재")
 @Route(uri = "/signup/admin", method = HttpMethod.POST)
 public class Signup_Admin implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
 		String id = AES256.encrypt(ctx.request().getFormAttribute("id"));
 		String password = SHA256.encrypt(ctx.request().getFormAttribute("password"));
-		String passwordConfirm = SHA256.encrypt(ctx.request().getFormAttribute("password_confirm"));
 		String name = AES256.encrypt(ctx.request().getFormAttribute("name"));
-		
-		if(!password.equals(passwordConfirm)) {
-			ctx.response().setStatusCode(204).end();
-			ctx.response().close();
-		}
 		
 		String statusMessage = null;
 		int statusCode = 0;

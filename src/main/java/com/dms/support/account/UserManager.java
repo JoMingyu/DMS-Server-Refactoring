@@ -11,11 +11,6 @@ import io.vertx.ext.web.RoutingContext;
 public class UserManager {
 	private static ResultSet rs;
 	
-	public void logout(RoutingContext ctx) {
-		MySQL.executeUpdate("UPDATE account SET session_id=null WHERE uid=?", getEncryptedUidFromSession(ctx));
-		SessionUtil.removeCookieOrSession(ctx, "UserSession");
-	}
-	
 	public static String getEncryptedUidFromSession(RoutingContext ctx) {
 		String sessionId = SessionUtil.getSessionId(ctx, "UserSession");
 		
@@ -26,7 +21,7 @@ public class UserManager {
 			} else {
 				return null;
 			}
-		} catch (SQLException e) {
+		} catch(SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
