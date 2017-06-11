@@ -2,7 +2,6 @@ package com.dms.support.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.UUID;
 
 import com.dms.support.util.AES256;

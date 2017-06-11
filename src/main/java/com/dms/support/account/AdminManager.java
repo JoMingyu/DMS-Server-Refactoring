@@ -2,7 +2,6 @@ package com.dms.support.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.UUID;
 
 import com.dms.support.util.AES256;
@@ -14,39 +13,6 @@ import io.vertx.ext.web.RoutingContext;
 
 public class AdminManager {
 	private static ResultSet rs;
-	
-	private boolean idExists(String id) {
-		rs = MySQL.executeQuery("SELECT COUNT(*) FROM admin_account WHERE id=?", id);
-		try {
-			if(rs.next()) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-			return true;
-		}
-	}
-	
-	public HashMap<String, Object> signUp(String id, String password, String name) {
-		id = AES256.encrypt(id);
-		password = SHA256.encrypt(password);
-		name = AES256.encrypt(name);
-		
-		HashMap<String, Object> result = new HashMap<String, Object>(1);
-		
-		if(idExists(id)) {
-			result.put("success", false);
-			result.put("msg", "이미 존재하는 아이디입니다.");
-		} else {
-			MySQL.executeUpdate("INSERT INTO admin_account (id, password, name) VALUES(?, ?, ?)", id, password, name);
-			result.put("success", true);
-			result.put("msg", "회원가입에 성공했습니다.");
-		}
-		
-		return result;
-	}
 	
 	private String getSessionFromId(String id) {
 		rs = MySQL.executeQuery("SELECT * FROM admin_account WHERE id=?", id);

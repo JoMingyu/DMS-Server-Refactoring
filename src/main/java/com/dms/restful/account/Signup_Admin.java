@@ -2,9 +2,7 @@ package com.dms.restful.account;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
-import com.dms.support.account.AdminManager;
 import com.dms.support.routing.API;
 import com.dms.support.routing.REST;
 import com.dms.support.routing.Route;
@@ -37,10 +35,16 @@ public class Signup_Admin implements Handler<RoutingContext> {
 		
 		if(!idExists(id)) {
 			MySQL.executeUpdate("INSERT INTO admin_account(id, password, name) VALUES(?, ?, ?)", id, password, name);
-			statusMessage 
+			statusMessage = "회원가입에 성공했습니다.";
+			statusCode = 201;
 		} else {
-			
+			statusMessage = "이미 존재하는 아이디입니다.";
+			statusCode = 204;
 		}
+		
+		ctx.response().setStatusCode(statusCode);
+		ctx.response().setStatusMessage(statusMessage).end();
+		ctx.response().close();
 	}
 	
 	private boolean idExists(String id) {

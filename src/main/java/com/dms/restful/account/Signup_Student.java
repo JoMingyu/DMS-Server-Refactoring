@@ -17,7 +17,7 @@ import io.vertx.ext.web.RoutingContext;
 @API(functionCategory = "계정", summary = "회원가입 - 학생")
 @REST(requestBody = "uid : String, id : String, password : String", successCode = 201, failureCode = 204, etc = "status message 존재")
 @Route(uri = "/account/signup/student", method = HttpMethod.POST)
-public class Signup implements Handler<RoutingContext> {
+public class Signup_Student implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
 		String uid = SHA256.encrypt(ctx.request().getFormAttribute("uid"));
