@@ -1,11 +1,16 @@
 package com.dms.restful.account;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import com.dms.support.account.AdminManager;
 import com.dms.support.routing.API;
 import com.dms.support.routing.REST;
 import com.dms.support.routing.Route;
+import com.dms.support.util.AES256;
+import com.dms.support.util.MySQL;
+import com.dms.support.util.SHA256;
 
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
@@ -17,28 +22,38 @@ import io.vertx.ext.web.RoutingContext;
 public class Signup_Admin implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
-		AdminManager adminManager = new AdminManager();
-		
-		String id = ctx.request().getFormAttribute("id");
-		String password = ctx.request().getFormAttribute("password");
-		String passwordConfirm = ctx.request().getFormAttribute("password_confirm");
-		String name = ctx.request().getFormAttribute("name");
+		String id = AES256.encrypt(ctx.request().getFormAttribute("id"));
+		String password = SHA256.encrypt(ctx.request().getFormAttribute("password"));
+		String passwordConfirm = SHA256.encrypt(ctx.request().getFormAttribute("password_confirm"));
+		String name = AES256.encrypt(ctx.request().getFormAttribute("name"));
 		
 		if(!password.equals(passwordConfirm)) {
 			ctx.response().setStatusCode(204).end();
 			ctx.response().close();
+		}
+		
+		String statusMessage = null;
+		int statusCode = 0;
+		
+		if(!idExists(id)) {
+			MySQL.executeUpdate("INSERT INTO admin_account(id, password, name) VALUES(?, ?, ?)", id, password, name);
+			statusMessage 
 		} else {
-			HashMap<String, Object> result = adminManager.signUp(id, password, name);
-			boolean success = Boolean.parseBoolean(result.get("success").toString());
 			
-			if(success) {
-				ctx.response().setStatusCode(201);
+		}
+	}
+	
+	private boolean idExists(String id) {
+		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM admin_account WHERE id=?", id);
+		try {
+			if(rs.next()) {
+				return true;
 			} else {
-				ctx.response().setStatusCode(204);
+				return false;
 			}
-			
-			ctx.response().setStatusMessage(result.get("msg").toString()).end();
-			ctx.response().close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return true;
 		}
 	}
 }

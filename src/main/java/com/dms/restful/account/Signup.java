@@ -1,11 +1,14 @@
 package com.dms.restful.account;
 
-import java.util.HashMap;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import com.dms.support.account.UserManager;
 import com.dms.support.routing.API;
 import com.dms.support.routing.REST;
 import com.dms.support.routing.Route;
+import com.dms.support.util.AES256;
+import com.dms.support.util.MySQL;
+import com.dms.support.util.SHA256;
 
 import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
@@ -17,22 +20,58 @@ import io.vertx.ext.web.RoutingContext;
 public class Signup implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
-		UserManager userManager = new UserManager();
+		String uid = SHA256.encrypt(ctx.request().getFormAttribute("uid"));
+		String id = AES256.encrypt(ctx.request().getFormAttribute("id"));
+		String password = SHA256.encrypt(ctx.request().getFormAttribute("password"));
 		
-		String uid = ctx.request().getFormAttribute("uid");
-		String id = ctx.request().getFormAttribute("id");
-		String password = ctx.request().getFormAttribute("password");
+		String statusMessage = null;
+		int statusCode = 0;
 		
-		HashMap<String, Object> result = userManager.signUp(uid, id, password);
-		boolean success = Boolean.parseBoolean(result.get("success").toString());
-		
-		if(success) {
-			ctx.response().setStatusCode(201);
-		} else {
-			ctx.response().setStatusCode(204);
+		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM account WHERE uid=?", uid);
+		try {
+			if(rs.next()) {
+				if(rs.getString("id") == null) {
+					if(!idExists(id)) {
+						MySQL.executeUpdate("UPDATE account SET id=?, password=? WHERE uid=?", id, password, uid);
+						statusMessage = "회원가입에 성공했습니다.";
+						statusCode = 201;
+					} else {
+						// Id exists
+						statusMessage = "이미 존재하는 아이디입니다.";
+						statusCode = 204;
+					}
+				} else {
+					// Already signed
+					statusMessage = "이미 회원가입되어 있습니다.";
+					statusCode = 204;
+				}
+			} else {
+				// Incorrect UID
+				statusMessage = "고유번호를 확인해 주세요.";
+				statusCode = 204;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			statusMessage = "서버 오류입니다.";
+			statusCode = 204;
 		}
 		
-		ctx.response().setStatusMessage(result.get("msg").toString()).end();
+		ctx.response().setStatusCode(statusCode);
+		ctx.response().setStatusMessage(statusMessage).end();
 		ctx.response().close();
+	}
+	
+	private boolean idExists(String id) {
+		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM account WHERE id=?", id);
+		try {
+			if(rs.next()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return true;
+		}
 	}
 }
