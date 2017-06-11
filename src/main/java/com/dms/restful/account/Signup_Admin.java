@@ -15,8 +15,8 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "계정", summary = "회원가입 - 관리자")
-@REST(requestBody = "name : String, id : String, password : String, password_confirm : String", successCode = 201, failureCode = 204, etc = "status message 존재")
-@Route(uri = "/account/signup/admin", method = HttpMethod.POST)
+@REST(requestBody = "id : String, password : String, password_confirm : String, name : String", successCode = 201, failureCode = 204, etc = "status message 존재")
+@Route(uri = "/signup/admin", method = HttpMethod.POST)
 public class Signup_Admin implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {

@@ -18,7 +18,7 @@ import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "계정", summary = "로그인 - 관리자")
 @REST(requestBody = "id : String, password : String, keep_login : boolean", successCode = 201, failureCode = 204, etc = "쿠키나 세션 존재")
-@Route(uri = "/account/signin/admin", method = HttpMethod.POST)
+@Route(uri = "/signin/admin", method = HttpMethod.POST)
 public class Signin_Admin implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
