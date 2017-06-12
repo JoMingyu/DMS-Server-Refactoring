@@ -14,13 +14,10 @@ import io.vertx.core.Handler;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
-@API(functionCategory = "신청", summary = "신청")
+@API(functionCategory = "신청", summary = "신청(키워드 기반)")
 @REST(requestBody = "keyword : String, (extension), class : int, seat : int, (goingout), sat : boolean, sun : boolean, (stay), value : int", successCode = 201, failureCode = 204, etc = "신청 시간이 아닐 경우 fail")
 @Route(uri = "/apply", method = HttpMethod.POST)
 public class Apply implements Handler<RoutingContext> {
-	private static String EXTENSION_APPLY_START = "17:30";
-	private static String EXTENSION_APPLY_LIMIT = "20:30";
-	
 	@Override
 	public void handle(RoutingContext ctx) {
 		String uid = UserManager.getEncryptedUidFromSession(ctx);
@@ -84,12 +81,7 @@ public class Apply implements Handler<RoutingContext> {
         int hour = current.get(Calendar.HOUR_OF_DAY);
         int minute = current.get(Calendar.MINUTE);
 
-        int hourStart = Integer.valueOf(EXTENSION_APPLY_START.split(":")[0]);
-        int minuteStart = Integer.valueOf(EXTENSION_APPLY_START.split(":")[1]);
-        int hourLimit = Integer.valueOf(EXTENSION_APPLY_LIMIT.split(":")[0]);
-        int minuteLimit = Integer.valueOf(EXTENSION_APPLY_LIMIT.split(":")[1]);
-        
-        if((hour > hourStart && hour < hourLimit) || (hour == hourStart && minute >= minuteStart) || (hour == hourLimit && minute < minuteLimit)) {
+        if((hour > 17 && hour < 20) || (hour == 17 && minute >= 30) || (hour == 20 && minute < 30)) {
         	return true;
         } else {
         	return false;

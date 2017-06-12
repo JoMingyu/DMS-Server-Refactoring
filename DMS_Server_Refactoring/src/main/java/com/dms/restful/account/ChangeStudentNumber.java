@@ -13,7 +13,7 @@ import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "계정", summary = "학번 교체")
 @REST(requestBody = "number : String(4자리)", successCode = 201, failureCode = 204, etc = "4자릿수 학번이 아닐 경우 fail")
-@Route(uri = "/change_number/student", method = HttpMethod.POST)
+@Route(uri = "/change_number/student", method = HttpMethod.PATCH)
 public class ChangeStudentNumber implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {

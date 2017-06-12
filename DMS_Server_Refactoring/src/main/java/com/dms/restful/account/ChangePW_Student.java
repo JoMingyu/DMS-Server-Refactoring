@@ -13,7 +13,7 @@ import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "계정", summary = "비밀번호 변경 - 학생")
 @REST(requestBody = "new_password : String", successCode = 201)
-@Route(uri = "/change_password/student", method = HttpMethod.POST)
+@Route(uri = "/change_password/student", method = HttpMethod.PATCH)
 public class ChangePW_Student implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
