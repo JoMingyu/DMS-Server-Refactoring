@@ -15,7 +15,7 @@ public class MainVerticle extends AbstractVerticle {
 	public void start() throws Exception {
 		Router router = Router.router(vertx);
 		
-		router.route().handler(BodyHandler.create());
+		router.route().handler(BodyHandler.create().setUploadsDirectory("upload-files"));
 		router.route().handler(CookieHandler.create());
 		router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 		Routing.route(router, "com.dms.restful");
