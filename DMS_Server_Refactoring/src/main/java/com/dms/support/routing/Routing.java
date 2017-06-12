@@ -59,7 +59,6 @@ public class Routing {
 		} // Outer for-each
 		
 		Collections.sort(resourceList);
-//		Arrays.sort(resourceList);
 		new Document(resourceList);
 	}
 }
