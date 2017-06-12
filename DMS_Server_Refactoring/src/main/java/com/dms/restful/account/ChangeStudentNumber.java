@@ -26,6 +26,7 @@ public class ChangeStudentNumber implements Handler<RoutingContext> {
 		}
 		
 		MySQL.executeUpdate("UPDATE account SET number=? WHERE uid=?", number, uid);
+		MySQL.executeUpdate("UPDATE student_data SET number=? WHERE uid=?", number, uid);
 		
 		ctx.response().setStatusCode(201).end();
 		ctx.response().close();
