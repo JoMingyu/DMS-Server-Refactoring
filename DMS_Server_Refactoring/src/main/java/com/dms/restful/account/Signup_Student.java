@@ -27,7 +27,7 @@ public class Signup_Student implements Handler<RoutingContext> {
 		String statusMessage = null;
 		int statusCode = 0;
 		
-		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM account WHERE uid=?", uid);
+		ResultSet rs = MySQL.executeQuery("SELECT * FROM account WHERE uid=?", uid);
 		try {
 			if(rs.next()) {
 				if(rs.getString("id") == null) {
@@ -62,7 +62,7 @@ public class Signup_Student implements Handler<RoutingContext> {
 	}
 	
 	private boolean idExists(String id) {
-		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM account WHERE id=?", id);
+		ResultSet rs = MySQL.executeQuery("SELECT * FROM account WHERE id=?", id);
 		try {
 			if(rs.next()) {
 				return true;

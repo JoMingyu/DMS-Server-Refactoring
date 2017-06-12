@@ -26,7 +26,7 @@ public class Signin_Student implements Handler<RoutingContext> {
 		String password = SHA256.encrypt(ctx.request().getFormAttribute("password"));
 		boolean keepLogin = Boolean.parseBoolean(ctx.request().getFormAttribute("keep_login"));
 		
-		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM account WHERE id=? AND password=?", id, password);
+		ResultSet rs = MySQL.executeQuery("SELECT * FROM account WHERE id=? AND password=?", id, password);
 		try {
 			if(rs.next()) {
 				String sessionId = getSessionFromId(id);
@@ -74,8 +74,8 @@ public class Signin_Student implements Handler<RoutingContext> {
 	
 	private String createSessionId() {
 		while(true) {
-			String uuid = SHA256.encrypt(UUID.randomUUID().toString());
-			ResultSet rs = MySQL.executeQuery("SELECT * FROM account WHERE session_id=?", uuid);
+			String uuid = UUID.randomUUID().toString();
+			ResultSet rs = MySQL.executeQuery("SELECT * FROM account WHERE session_id=?", SHA256.encrypt(uuid));
 			try {
 				if(!rs.next()) {
 					return uuid;

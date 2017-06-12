@@ -42,7 +42,7 @@ public class Signup_Admin implements Handler<RoutingContext> {
 	}
 	
 	private boolean idExists(String id) {
-		ResultSet rs = MySQL.executeQuery("SELECT COUNT(*) FROM admin_account WHERE id=?", id);
+		ResultSet rs = MySQL.executeQuery("SELECT * FROM admin_account WHERE id=?", id);
 		try {
 			if(rs.next()) {
 				return true;
