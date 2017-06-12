@@ -61,3 +61,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+DMS_Server_Refactoring/config/keys.cnf
+DMS_Server_Refactoring/API Document.xlsx
+*.log
+DMS_Server_Refactoring/config/keys.cnf

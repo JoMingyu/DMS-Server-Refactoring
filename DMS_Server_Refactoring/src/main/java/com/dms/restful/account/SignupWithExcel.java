@@ -34,7 +34,7 @@ import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "계정", summary = "신입생 정보 입력(엑셀)")
-@REST(requestBody = "", successCode = 201, failureCode = 204)
+@REST(requestBody = "행마다 (4자리 학번, 이름) 형식", successCode = 201)
 @Route(uri = "/signup/excel", method = HttpMethod.POST)
 public class SignupWithExcel implements Handler<RoutingContext> {
 	@Override
@@ -71,6 +71,7 @@ public class SignupWithExcel implements Handler<RoutingContext> {
 				
 				String uidFilePath = createExcelOfStudentData(students);
 				
+				ctx.response().setStatusCode(201);
 				ctx.response().putHeader(HttpHeaders.CONTENT_DISPOSITION, "filename=" + new String("UID.xlsx".getBytes("UTF-8"), "ISO-8859-1"));
 				ctx.response().sendFile(uidFilePath);
 				ctx.response().close();
