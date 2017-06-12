@@ -23,6 +23,12 @@ Statement와 StringBuilder를 이용해 쿼리문 전체를 받아서 직접 처
 ## 변경하자
 ALTER TABLE `account` CHANGE COLUMN `session_key` `session_id` VARCHAR(128) NULL DEFAULT NULL ;
 
+ALTER TABLE `account` DROP COLUMN `permission`;
+
 ALTER TABLE `admin_account` CHANGE COLUMN `session_key` `session_id` VARCHAR(128) NULL DEFAULT NULL ;
 
 ALTER TABLE `student_data` DROP COLUMN `status`;
+
+ALTER TABLE `extension_apply` CHANGE COLUMN `class` `no` INT(1) NOT NULL ;
+
+ALTER TABLE `extension_map` CHANGE COLUMN `room` `no` INT(1) NOT NULL ;
