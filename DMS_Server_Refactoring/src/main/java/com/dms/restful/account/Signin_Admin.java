@@ -29,10 +29,14 @@ public class Signin_Admin implements Handler<RoutingContext> {
 		ResultSet rs = MySQL.executeQuery("SELECT * FROM admin_account WHERE id=? AND password=?", id, password);
         try {
         	if(rs.next()) {
+        		// Login success
+        		
         		String sessionId = getSessionFromId(id);
+        		// Find session id from admin_account table
         		
         		if(sessionId == null) {
         			sessionId = createSessionId();
+        			// If session id is null, create new session id(not duplicated)
         		}
         		
         		if(keepLogin) {

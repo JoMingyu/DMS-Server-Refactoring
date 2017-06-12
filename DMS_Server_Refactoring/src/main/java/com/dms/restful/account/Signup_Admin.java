@@ -28,10 +28,12 @@ public class Signup_Admin implements Handler<RoutingContext> {
 		int statusCode = 0;
 		
 		if(!idExists(id)) {
+			// Id doesn't duplicated
 			MySQL.executeUpdate("INSERT INTO admin_account(id, password, name) VALUES(?, ?, ?)", id, password, name);
 			statusMessage = "회원가입에 성공했습니다.";
 			statusCode = 201;
 		} else {
+			// Id exists
 			statusMessage = "이미 존재하는 아이디입니다.";
 			statusCode = 204;
 		}

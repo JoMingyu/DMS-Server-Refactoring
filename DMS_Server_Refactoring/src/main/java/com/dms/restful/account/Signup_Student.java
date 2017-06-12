@@ -30,8 +30,11 @@ public class Signup_Student implements Handler<RoutingContext> {
 		ResultSet rs = MySQL.executeQuery("SELECT * FROM account WHERE uid=?", uid);
 		try {
 			if(rs.next()) {
+				// UID exists
 				if(rs.getString("id") == null) {
+					// Unregistered
 					if(!idExists(id)) {
+						// Id doesn't duplicated
 						MySQL.executeUpdate("UPDATE account SET id=?, password=? WHERE uid=?", id, password, uid);
 						statusMessage = "회원가입에 성공했습니다.";
 						statusCode = 201;
@@ -46,7 +49,7 @@ public class Signup_Student implements Handler<RoutingContext> {
 					statusCode = 204;
 				}
 			} else {
-				// Incorrect UID
+				// Can't find UID
 				statusMessage = "고유번호를 확인해 주세요.";
 				statusCode = 204;
 			}

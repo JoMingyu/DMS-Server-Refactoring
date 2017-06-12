@@ -40,10 +40,15 @@ public class SignupWithExcel implements Handler<RoutingContext> {
 	@Override
 	public void handle(RoutingContext ctx) {
 		List<Student> students = new ArrayList<Student>();
+		// New accounts' list
 		
 		Set<FileUpload> files = ctx.fileUploads();
+		// Uploaded excel files
+		
 		for(FileUpload file : files) {
 			File excel = new File(file.uploadedFileName());
+			// Uploaded excel file
+			
 			try {
 				XSSFWorkbook workbook = new XSSFWorkbook(excel);
 				XSSFSheet sheet = workbook.getSheetAt(0);
@@ -92,6 +97,7 @@ public class SignupWithExcel implements Handler<RoutingContext> {
 	
 	private String createExcelOfStudentData(List<Student> students) {
 		File excel = new File("temp_uid.xlsx");
+		
 		XSSFWorkbook workbook = new XSSFWorkbook();
 		XSSFSheet sheet = workbook.createSheet();
 		int rowCount = 0;
@@ -104,6 +110,8 @@ public class SignupWithExcel implements Handler<RoutingContext> {
 			numberCell.setCellValue(student.getNumber());
 			nameCell.setCellValue(student.getName());
 			uidCell.setCellValue(student.getUid());
+			// Insert account's info
+			
 			Log.I("Registered : " + student.getNumber() + " " + student.getName());
 		}
 		
