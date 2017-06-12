@@ -17,7 +17,9 @@ POM에 불필요한 dependency
 @RouteRegistration(path = "", method = {HttpMethod.***})
 #### 현재
 @API()
+
 @REST()
+
 @Route(uri = "", method = HttpMethod.***}
 + API 문서 자동화
 
