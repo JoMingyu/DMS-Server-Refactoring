@@ -17,7 +17,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "신청", summary = "신청 정보 조회(키워드 기반)")
-@REST(requestBody = "keyword : String, (extension, goingout, stay)", responseBody = "(extension), ", successCode = 201, failureCode = 204, etc = "신청 정보가 없을 경우 fail")
+@REST(requestBody = "keyword : String, (extension | goingout | stay)", responseBody = "(extension), no : int, seat : int, name : String, (goingout), sat : boolean, sun : boolean, (stay), value : int", successCode = 201, failureCode = 204, etc = "신청 정보가 없을 경우 fail")
 @Route(uri = "/apply", method = HttpMethod.GET)
 public class Inquire implements Handler<RoutingContext> {
 	@Override
@@ -33,7 +33,7 @@ public class Inquire implements Handler<RoutingContext> {
 				rs = MySQL.executeQuery("SELECT * FROM extension_apply WHERE uid=?", uid);
 			
 				if(rs.next()) {
-					response.put("class", rs.getInt("class"));
+					response.put("no", rs.getInt("no"));
 					response.put("seat", rs.getInt("seat"));
 					response.put("name", AES256.decrypt(rs.getString("name")));
 				}

@@ -15,7 +15,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "신청", summary = "신청(키워드 기반)")
-@REST(requestBody = "keyword : String, (extension), class : int, seat : int, (goingout), sat : boolean, sun : boolean, (stay), value : int", successCode = 201, failureCode = 204, etc = "신청 시간이 아닐 경우 fail")
+@REST(requestBody = "keyword : String, (extension), no : int, seat : int, (goingout), sat : boolean, sun : boolean, (stay), value : int", successCode = 201, failureCode = 204, etc = "신청 시간이 아닐 경우 fail")
 @Route(uri = "/apply", method = HttpMethod.POST)
 public class Apply implements Handler<RoutingContext> {
 	@Override
@@ -31,7 +31,7 @@ public class Apply implements Handler<RoutingContext> {
 			}
 			
 			// Can extension apply
-			int cls = Integer.parseInt(ctx.request().getFormAttribute("class"));
+			int no = Integer.parseInt(ctx.request().getFormAttribute("no"));
 			int seat = Integer.parseInt(ctx.request().getFormAttribute("seat"));
 
 			MySQL.executeUpdate("DELETE FROM extension_apply WHERE uid=?", uid);
@@ -39,7 +39,7 @@ public class Apply implements Handler<RoutingContext> {
 			try {
 				rs.next();
 				String name = rs.getString("name");
-				MySQL.executeUpdate("INSERT INTO extension_apply(class, seat, name, uid) VALUES(?, ?, ?, ?)", cls, seat, name, uid);
+				MySQL.executeUpdate("INSERT INTO extension_apply(no, seat, name, uid) VALUES(?, ?, ?, ?)", no, seat, name, uid);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
