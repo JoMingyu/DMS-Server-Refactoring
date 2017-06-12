@@ -50,23 +50,19 @@ public class InquireExtensionMap implements Handler<RoutingContext> {
 			}
 			
 			JSONArray mapArray = new JSONArray(map);
-			// Parse to JSON array : [[], [], []]
+			// Parse map to JSON array : [[], [], []]
 			
 			int seatCount = 1;
 			for(int i = 0; i < mapArray.length(); i++) {
 				JSONArray seatRow = mapArray.getJSONArray(i);
+				// Changes are automatically applied to mapArray
 				
 				for(int j = 0; j < seatRow.length(); j++) {
 					if(seatRow.getInt(j) == 1) {
 						// Available position
-						if(seatData.containsKey(seatCount)) {
-							// Applied
 						
-							seatRow.put(j, seatData.get(seatCount));
-							// Set applier's name
-						} else {
-							seatRow.put(j, seatCount);
-						}
+						seatRow.put(j, seatData.containsKey(seatCount) ? seatData.get(seatCount) : seatCount);
+						// Set applier's name when applied, Set seatCount when not applied
 
 						seatCount++;
 						// Accumulate seat count only available position
