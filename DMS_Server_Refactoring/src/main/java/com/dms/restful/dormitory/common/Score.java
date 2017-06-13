@@ -35,7 +35,8 @@ public class Score implements Handler<RoutingContext> {
 			e.printStackTrace();
 		}
 		
-		ctx.response().setStatusCode(200).end();
+		ctx.response().setStatusCode(200);
+		ctx.response().end(response.toString());
 		ctx.response().close();
 	}
 }
