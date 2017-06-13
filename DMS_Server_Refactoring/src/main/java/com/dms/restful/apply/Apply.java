@@ -15,7 +15,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "신청", summary = "신청(키워드 기반)")
-@REST(requestBody = "keyword : String, (extension), no : int, seat : int, (goingout), sat : boolean, sun : boolean, (stay), value : int", successCode = 201, failureCode = 204, etc = "신청 시간이 아닐 경우 fail")
+@REST(requestBody = "keyword : String, (extension), no : int, seat : int, (goingout), sat : boolean, sun : boolean, (stay), value : int, (merit), content : String, target : String(optional)", successCode = 201, failureCode = 204, etc = "신청 시간이 아닐 경우 fail")
 @Route(uri = "/apply", method = HttpMethod.POST)
 public class Apply implements Handler<RoutingContext> {
 	@Override
@@ -64,6 +64,17 @@ public class Apply implements Handler<RoutingContext> {
 			
 			MySQL.executeUpdate("DELETE FROM stay_apply WHERE uid=?", uid);
 			MySQL.executeUpdate("INSERT INTO stay_apply(uid, value) VALUES(?, ?))", uid, value);
+			
+			break;
+		case "merit":
+			String content = ctx.request().getFormAttribute("content");
+			
+			if(ctx.request().formAttributes().contains("target")) {
+				String target = ctx.request().getFormAttribute("target");
+				MySQL.executeUpdate("INSERT INTO merit_apply(uid, target, content) VALUES(?, ?, ?)", uid, target, content);
+			} else {
+				MySQL.executeUpdate("INSERT INTO merit_apply(uid, content) VALUES(?, ?)", uid, content);
+			}
 			
 			break;
 		default:

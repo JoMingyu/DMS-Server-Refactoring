@@ -3,6 +3,7 @@ package com.dms.restful.apply;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.dms.support.account.UserManager;
@@ -17,7 +18,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.RoutingContext;
 
 @API(functionCategory = "신청", summary = "신청 정보 조회(키워드 기반)")
-@REST(requestBody = "keyword : String, (extension | goingout | stay)", responseBody = "(extension), no : int, seat : int, name : String, (goingout), sat : boolean, sun : boolean, (stay), value : int", successCode = 201, failureCode = 204, etc = "신청 정보가 없을 경우 fail")
+@REST(requestBody = "keyword : String, (extension | goingout | stay)", responseBody = "(extension), no : int, seat : int, name : String, (goingout), sat : boolean, sun : boolean, (stay), value : int, (merit), content : String, has_target : boolean, target : String", successCode = 201, failureCode = 204, etc = "신청 정보가 없을 경우 fail")
 @Route(uri = "/apply", method = HttpMethod.GET)
 public class Inquire implements Handler<RoutingContext> {
 	@Override
@@ -56,10 +57,36 @@ public class Inquire implements Handler<RoutingContext> {
 				}
 				
 				break;
-			default:
-				ctx.response().setStatusCode(204).end();
-				ctx.response().close();
+			case "merit":
+				// Uses array
+				
+				JSONArray responseArray = new JSONArray();
+				rs = MySQL.executeQuery("SELECT * FROM merit_apply WHERE uid=?", uid);
+				
+				while(rs.next()) {
+					response.put("no", rs.getInt("no"));
+					response.put("content", rs.getString("content"));
+					if(rs.getString("target").isEmpty()) {
+						response.put("has_target", true);
+						response.put("target", rs.getString("target"));
+					} else {
+						response.put("has_target", false);
+					}
+					
+					responseArray.put(response);
+				}
+				
+				if(responseArray.length() == 0) {
+					ctx.response().setStatusCode(204).end();
+					ctx.response().close();
+				} else {
+					ctx.response().setStatusCode(201).end(responseArray.toString());
+					ctx.response().close();
+				}
+				
 				return;
+			default:
+				break;
 			}
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -69,7 +96,7 @@ public class Inquire implements Handler<RoutingContext> {
 			ctx.response().setStatusCode(204).end();
 			ctx.response().close();
 		} else {
-			ctx.response().setStatusCode(201).end();
+			ctx.response().setStatusCode(201).end(response.toString());
 			ctx.response().close();
 		}
 	}
