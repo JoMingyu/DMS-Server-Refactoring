@@ -1,4 +1,4 @@
-package com.dms.restful.apply;
+package com.dms.restful.dormitory.apply;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
