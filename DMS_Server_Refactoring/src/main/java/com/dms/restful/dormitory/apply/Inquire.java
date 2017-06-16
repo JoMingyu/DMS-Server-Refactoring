@@ -10,7 +10,6 @@ import com.dms.support.account.UserManager;
 import com.dms.support.routing.API;
 import com.dms.support.routing.REST;
 import com.dms.support.routing.Route;
-import com.dms.support.util.AES256;
 import com.dms.support.util.MySQL;
 
 import io.vertx.core.Handler;
@@ -36,7 +35,7 @@ public class Inquire implements Handler<RoutingContext> {
 				if(rs.next()) {
 					response.put("no", rs.getInt("no"));
 					response.put("seat", rs.getInt("seat"));
-					response.put("name", AES256.decrypt(rs.getString("name")));
+					response.put("name", rs.getString("name")); // Encrypted
 				}
 			
 				break;
