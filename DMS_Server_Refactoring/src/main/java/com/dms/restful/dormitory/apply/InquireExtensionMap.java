@@ -45,7 +45,7 @@ public class InquireExtensionMap implements Handler<RoutingContext> {
 		
 		try {
 			while(rs.next()) {
-				seatData.put(rs.getInt("seat"), AES256.decrypt(rs.getString("name")));
+				seatData.put(rs.getInt("seat"), rs.getString("name"));
 				// Get apply status
 			}
 			
