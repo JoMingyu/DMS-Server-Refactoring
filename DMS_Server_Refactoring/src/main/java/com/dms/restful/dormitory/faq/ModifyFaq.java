@@ -25,7 +25,7 @@ public class ModifyFaq implements Handler<RoutingContext> {
 		String title = ctx.request().getFormAttribute("title");
 		String content = ctx.request().getFormAttribute("content");
 		
-		MySQL.executeUpdate("UPDATE faq SET title=?, content=? WHERE no=?", title, content ,no);
+		MySQL.executeUpdate("UPDATE faq SET title=?, content=? WHERE no=?", title, content, no);
 		
 		ctx.response().setStatusCode(200).end();
 		ctx.response().close();
