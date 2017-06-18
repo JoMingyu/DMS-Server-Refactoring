@@ -22,5 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/dsm2016/Desktop/1. Java Libraries/school-api-3.0.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
