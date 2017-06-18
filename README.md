@@ -33,5 +33,5 @@ ALTER TABLE `extension_apply` CHANGE COLUMN `class` `no` INT(1) NOT NULL ;
 
 ALTER TABLE `extension_map` CHANGE COLUMN `room` `no` INT(1) NOT NULL ;
 
-ALTER TABLE `dsm_dms`.`meal` DROP COLUMN `dinner_allergy`, DROP COLUMN `lunch_allergy`, DROP COLUMN `breakfast_allergy`;
+ALTER TABLE `meal` DROP COLUMN `dinner_allergy`, DROP COLUMN `lunch_allergy`, DROP COLUMN `breakfast_allergy`;
 
