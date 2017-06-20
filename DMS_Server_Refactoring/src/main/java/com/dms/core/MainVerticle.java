@@ -20,6 +20,7 @@ public class MainVerticle extends AbstractVerticle {
 		router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 		Routing.route(router, "com.dms.restful");
 		router.route().handler(StaticHandler.create());
+		router.route().handler(CORSHandler.create());
 		
 		vertx.createHttpServer().requestHandler(router::accept).listen(80);
 	}
