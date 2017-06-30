@@ -1,5 +1,6 @@
 package com.dms.core;
 
+import com.dms.handler.CORSHandler;
 import com.dms.support.routing.Routing;
 
 import io.vertx.core.AbstractVerticle;
@@ -18,9 +19,9 @@ public class MainVerticle extends AbstractVerticle {
 		router.route().handler(BodyHandler.create().setUploadsDirectory("upload-files"));
 		router.route().handler(CookieHandler.create());
 		router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+		router.route().handler(CORSHandler.create());
 		Routing.route(router, "com.dms.restful");
 		router.route().handler(StaticHandler.create());
-		router.route().handler(CORSHandler.create());
 		
 		vertx.createHttpServer().requestHandler(router::accept).listen(80);
 	}

@@ -1,6 +1,6 @@
 package com.dms.support.util;
 
-import java.io.File; 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
@@ -14,7 +14,6 @@ public class Log {
 		File dir = new File("logs");
 		if(!dir.exists()) {
 			dir.mkdir();
-			// mkdir method contains exist check
 		}
 		
 		cal = Calendar.getInstance();
@@ -34,6 +33,10 @@ public class Log {
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
+	}
+	
+	public static void Req(String s) {
+		writeToFile(getLogText("REQUEST", s));
 	}
 	
 	public static void Q(String sql) {
@@ -72,6 +75,8 @@ public class Log {
 	}
 	
 	private static void writeToFile(String logMsg) {
+		// This method is called every logging
+		
 		check();
 		
 		try {
